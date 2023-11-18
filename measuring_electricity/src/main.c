@@ -19,7 +19,6 @@
 #include <uart.h>           // Peter Fleury's UART library
 #include <stdlib.h>         // C library. Needed for number conversions
 #include <oled.h>
-#include "Arduino.h"
 
 /* Pins definitions --------------------------------------------------*/
 #define DT PD3    // DT is a pin for potenciometer output
@@ -27,9 +26,6 @@
 
 int main(void)
 {
-    pinMode(DT, INPUT);
-    pinMode(CLK, INPUT);
-
     twi_init(); //TWI
     uart_init(UART_BAUD_SELECT(115200, F_CPU)); //UART
     sei();  // Needed for UART
