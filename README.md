@@ -1,6 +1,6 @@
 # Project in C
 
-Topic: Measuring electricity
+Topic: Measuring Electricity
 
 ### Team members
 
@@ -12,13 +12,13 @@ Topic: Measuring electricity
 
 Enter a description of the problem and how to solve it.
 
-## Hardware description of demo application
+## Hardware description of the demo application
 
 Insert descriptive text and schematic(s) of your implementation.
 
 ## Software description
 
-Put flowchats of your algorithm(s) and direct links to source files in `src` or `lib` folders.
+Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
 
 ## Instructions
 
