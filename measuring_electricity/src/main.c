@@ -19,6 +19,7 @@
 #include <uart.h>           // Peter Fleury's UART library
 #include <stdlib.h>         // C library. Needed for number conversions
 #include <oled.h>
+#include <adc.h>
 
 /* Pins definitions --------------------------------------------------*/
 #define DT PD3    // DT is a pin for potenciometer output
@@ -34,8 +35,8 @@ int main(void)
     TIM1_OVF_1SEC
     TIM1_OVF_ENABLE
 
-    // Timer0 enable for 16 microsecond period
-    TIM0_OVF_16US
+    // Timer0 enable for 1 milisecond period
+    TIM0_OVF_1MS
     TIM0_OVF_ENABLE
 
     // Initial UI
@@ -67,4 +68,7 @@ ISR(TIMER1_OVF_vect)
 
 ISR(TIMER0_OVF_vect)
 {
+    uint16_t valueADC;
+
+    valueADC = ADC_CONVERSION_A0;
 }
