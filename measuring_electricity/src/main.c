@@ -19,25 +19,42 @@
 #include <uart.h>           // Peter Fleury's UART library
 #include <stdlib.h>         // C library. Needed for number conversions
 #include <oled.h>
-#include <adc.h>
+#include <gpio.h>
 
 /* Pins definitions --------------------------------------------------*/
+#define SW PD2   // CLK is a pin for potenciometer output 
 #define DT PD3    // DT is a pin for potenciometer output
 #define CLK PD4   // CLK is a pin for potenciometer output 
 
+uint8_t state = 0;
+uint8_t state_rotary = 0;
+
 int main(void)
 {
+    // Configure ADC
+    ADMUX = ADMUX | (1<<REFS0); 
+    ADMUX = ADMUX | (0<<REFS1); 
+    // Select input channel ADC0 (voltage divider pin)
+    ADMUX = ADMUX & ~(1<<MUX3 | 1<<MUX2 | 1<<MUX1 | 1<<MUX0);
+    // Enable ADC module
+    ADCSRA = ADCSRA | (1<<ADEN);
+    // Enable conversion complete interrupt
+    ADCSRA = ADCSRA | (1<<ADIE);
+    // Set clock prescaler to 128
+    ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
+
     twi_init(); //TWI
     uart_init(UART_BAUD_SELECT(115200, F_CPU)); //UART
-    sei();  // Needed for UART
 
-    // Timer1 enable for 1 second period
-    TIM1_OVF_1SEC
+    // Timer1 enable
+    TIM1_OVF_33MS
     TIM1_OVF_ENABLE
 
     // Timer0 enable for 1 milisecond period
-    TIM0_OVF_1MS
+    TIM0_OVF_16MS
     TIM0_OVF_ENABLE
+
+    sei(); 
 
     // Initial UI
     oled_init(OLED_DISP_ON);
@@ -62,13 +79,68 @@ int main(void)
     oled_display();
 }
 
-ISR(TIMER1_OVF_vect)
-{
-}
-
 ISR(TIMER0_OVF_vect)
 {
-    uint16_t valueADC;
+    uint8_t DT_read;
+    uint8_t CLK_read;
+    uint8_t SW_read;
+    SW_read = GPIO_read(&PIND, PD2);
+    DT_read = GPIO_read(&PIND, PD3);
+    CLK_read = GPIO_read(&PIND, PD4);
 
-    valueADC = ADC_CONVERSION_A0;
+    if (SW_read == 0)
+    {
+        state = 1; // Then change to rotary encoder value
+    }
+
+    char string[2];  // String for converted numbers by itoa()
+    itoa(DT_read, string, 10);
+    oled_gotoxy(0, 4);
+    oled_puts("    ");
+    oled_gotoxy(0, 4);
+    oled_puts(string);
+
+    itoa(CLK_read, string, 10);
+    oled_gotoxy(0, 5);
+    oled_puts("    ");
+    oled_gotoxy(0, 5);
+    oled_puts(string);
+
+    itoa(SW_read, string, 10);
+    oled_gotoxy(0, 6);
+    oled_puts("    ");
+    oled_gotoxy(0, 6);
+    oled_puts(string);
+
+    itoa(state, string, 10);
+    oled_gotoxy(0, 7);
+    oled_puts("    ");
+    oled_gotoxy(0, 7);
+    oled_puts(string);
+}
+
+ISR(TIMER1_OVF_vect)
+{
+    ADCSRA = ADCSRA | (1<<ADSC);
+}
+
+ISR(ADC_vect)
+{
+    uint16_t value;
+    float mV_curr_sens;
+    char string[6];  // String for converted numbers by itoa()
+    value = ADC;
+    mV_curr_sens = (value-512)*1000;
+    itoa(mV_curr_sens, string, 10);
+    oled_gotoxy(0, 0);
+    oled_puts("    ");
+    oled_gotoxy(0, 0);
+    oled_puts(string);
+
+    itoa(value, string, 10);
+    oled_gotoxy(0, 2);
+    oled_puts("    ");
+    oled_gotoxy(0, 2);
+    oled_puts(string);
+    oled_display();
 }
