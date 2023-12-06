@@ -69,12 +69,12 @@
 #define TIM0_OVF_DISABLE TIMSK0 &= ~(1<<TOIE0);
 
 #define TIM2_STOP      TCCR2B &= ~((1<<CS22) | (1<<CS21) | (1<<CS20));
-#define TIM2_OVF_8US   TCCR2B &= ~((1<<CS22) | (1<<CS21)); TCCR2B |= (1<<CS20);
-#define TIM2_OVF_64US  TCCR2B &= ~((1<<CS22) | (1<<CS20)); TCCR2B |= (1<<CS21);
-#define TIM2_OVF_256US TCCR2B &= ~(1<<CS22); TCCR2B |= (1<<CS21) | (1<<CS20);
-#define TIM2_OVF_512US  TCCR2B &= ~((1<<CS21) | (1<<CS20)); TCCR2B |= (1<<CS22);
-#define TIM2_OVF_1024US  TCCR2B &= ~(1<<CS21); TCCR2B |= (1<<CS22) | (1<<CS20);
-#define TIM2_OVF_2048US  TCCR2B &= ~(1<<CS20); TCCR2B |= (1<<CS22) | (1<<CS21);
+#define TIM2_OVF_NO_PRE   TCCR2B &= ~((1<<CS22) | (1<<CS21)); TCCR2B |= (1<<CS20);
+#define TIM2_OVF_128US  TCCR2B &= ~((1<<CS22) | (1<<CS20)); TCCR2B |= (1<<CS21);
+#define TIM2_OVF_512US TCCR2B &= ~(1<<CS22); TCCR2B |= (1<<CS21) | (1<<CS20);
+#define TIM2_OVF_1MS  TCCR2B &= ~((1<<CS21) | (1<<CS20)); TCCR2B |= (1<<CS22);
+#define TIM2_OVF_2MS  TCCR2B &= ~(1<<CS21); TCCR2B |= (1<<CS22) | (1<<CS20);
+#define TIM2_OVF_4MS  TCCR2B &= ~(1<<CS20); TCCR2B |= (1<<CS22) | (1<<CS21);
 #define TIM2_OVF_16MS  TCCR2B |= (1<<CS22) | (1<<CS21) | (1<<CS20);
 
 #define TIM2_OVF_ENABLE  TIMSK2 |= (1<<TOIE2);
