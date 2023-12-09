@@ -16,6 +16,10 @@ Enter a description of the problem and how to solve it.
 
 Insert descriptive text and schematic(s) of your implementation.
 
+## Accuracy issues
+
+Text
+
 ## Software description
 
 Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.

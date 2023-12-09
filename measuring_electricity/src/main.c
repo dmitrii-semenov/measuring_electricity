@@ -18,28 +18,28 @@
 #include <stdlib.h>         // C library. Needed for number conversions
 #include <oled.h>           // Oled library for the display
 #include <gpio.h>           // GPIO library for reading values from the inputs
-#include <adc.h>
-//#include <code_functions.h>
+#include <adc.h>            // Library with custom ADC functions
+#include <code_functions.h> // Library with some code function, for space optimization
 
 /* Pins definitions --------------------------------------------------*/
-#define SW PD2                     // Button 
+#define SW PD2                                                      // Button 
 
 /* Parameters --------------------------------------------------------*/
-#define AVERAGE_FACTOR 1
-#define REF_V 5
-#define REF_R 0
+#define AVERAGE_FACTOR 1                                            // Number of averages, 1 - no average(10 recommended)
+#define REF_V 5                                                     // Reference voltage for calculations
+#define REF_R 0                                                     // Reference resistance for calculations
 
 /* Global variables --------------------------------------------------*/
-volatile uint8_t mode = 0;         // Mode of measurement
-volatile uint8_t SW_ena = 0;       // Button sensor
+volatile uint8_t mode = 0;                                          // Mode of measurement
+volatile uint8_t SW_ena = 0;                                        // Button sensor
 volatile float ADC_avg_internal = 0;
-volatile float ADC_avg = 0;        // Averaged ADC value 
-static float Sensor_Off = 1.1; 
+volatile float ADC_avg = 0;                                         // Averaged ADC value 
+static float Sensor_Off = 0;                                        // Offset (ADC and sensor, used for calibration)
 
-float current_meas;                // Calculated values
-float voltage_meas;
-float resistance_meas;
-float capacitance_meas;
+float current_meas;                                                 // Calculated value of current
+float voltage_meas;                                                 // Calculated value of voltage
+float resistance_meas;                                              // Calculated value of resistance
+float capacitance_meas;                                             // Calculated value of capacitance
 
 void Clear_values(void)
 {
@@ -135,15 +135,15 @@ ISR(TIMER1_OVF_vect)
     no_of_overflows++;
     if (no_of_overflows >= 10)
     {
-        if (SW_ena > 0)                                                 // If button was pressed, change the state
+        if (SW_ena > 0)                                             // If button was pressed, change the state
         {
-            cli();                                                      // Disable interrupt
+            cli();                                                  // Disable interrupt
             // Do this every 3 x 33 ms = 100 ms
             no_of_overflows = 0;
             SW_ena = 0;
             mode++;
             if (mode == 4) mode = 0;
-            sei();                                                      // Enable interrupt
+            sei();                                                  // Enable interrupt
         }
     }
     // Else do nothing and exit the ISR     
@@ -151,11 +151,11 @@ ISR(TIMER1_OVF_vect)
 
 ISR(ADC_vect)
 {
-    char string[2];  // String for converted numbers by itoa()
+    char string[2];                                                 // String for converted numbers by itoa()
     float value;
     float value_avg;
 
-    value = ADC*(5.00/1023.00);                                           // Assume that ADC has a 5V reference
+    value = ADC*(5.00/1023.00);                                     // Assume that ADC has a 5V reference
     
     oled_gotoxy(13, 6);
     oled_puts("    ");
