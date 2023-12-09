@@ -113,7 +113,7 @@ ISR(TIMER0_OVF_vect)                                                // ADC value
     no_of_overflows++;
     if (no_of_overflows >= 3)
     {
-        // Do this every 6 x 16 ms = 100 ms
+        // Do this every 3 x 16 ms = 50 ms
         no_of_overflows = 0;
         no_average++;
         ADCSRA |= (1<<ADSC);
