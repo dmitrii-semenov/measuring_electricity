@@ -22,7 +22,8 @@ In order to make the design of displaying the results on the display, we used a 
 In the main file, we have global variables involved: 
 * `mode`(mode of measurement) - the first variable is used to switch the mode of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
 * `SW_ena`(button sensor) - this is the signal used for the button, if the `SW_ena` is in one(1) it means that the button is pressed, if it is at zero(0) it means that the button is not pressed;
-* `Sensor_Off` - this is the offset of the sensor, if we assume that there is some kind of error in the ADC or in the sensor and it does not output 2.5 volts at zero current, then some current can be clamped as this variable, which will work as an offset(used for calibration);
+* `Sensor_Off` - this is the offset of the sensor, if we assume that there is some kind of error in the ADC or in the sensor and it does not output 2.5V at zero current, then some current can be clamped as this variable, which will work as an offset(used for calibration);
+* `ADC_avg` - the variable into which the averaged value of the ADC converter is mapped(averaged ADC value);
 
 ## Accuracy issues
 
