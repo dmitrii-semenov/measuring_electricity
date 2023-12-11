@@ -21,7 +21,7 @@ In order to make the design of displaying the results on the display, we used a 
 
 In the main file, we have global variables involved: 
 * `mode`(mode of measurement) - the first variable is used to switch the mode of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
-* `SW_ena`(button sensor) - 
+* `SW_ena`(button sensor) - this is the signal used for the button, if the `SW_ena` is at 1 it means that the button is pressed, if it is at zero it means that the button is not pressed;
 
 ## Accuracy issues
 
