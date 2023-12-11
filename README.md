@@ -11,7 +11,10 @@ Topic: Measuring Electricity
 ## Theoretical description and explanation
 
 To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
-In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.c` contains just the names of the functions used, and the second part `code_functions.h` contains the main code with which we display the values or clear the display before subsequent measurement.
+
+In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement.
+
+
 
 
 ## Hardware description of the demo application
