@@ -4,9 +4,9 @@ Topic: Measuring Electricity
 
 ### Team members
 
-* Dmitrii Semenov (responsible for ...)
-* Roman Lunin (responsible for ...)
-* Vladislav Karmanov (responsible for ...)
+* Dmitrii Semenov (responsible for debugging, C programing, hardware description)
+* Roman Lunin (responsible C programing, github design, software description)
+* Vladislav Karmanov (responsible for nothing)
 
 ## Theoretical description and explanation
 
