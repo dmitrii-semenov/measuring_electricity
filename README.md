@@ -78,7 +78,6 @@ Write an instruction manual for your application, including photos and a link to
 7. Use the button to select the mode to measure the desired value;
 8. Now wait a bit , the measurement is being carried out;
 
-2. 
 ## References
 
 1. Write your text here.
