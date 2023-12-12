@@ -42,6 +42,8 @@ Circuit of a `bandgap` reference:
 
 * The sensor has a conversion scale of `185mV/A`, and at the same time we use ADC, which has only `1024 values/5V`, this means that the ADC has a division scale of only 5mV, this is a fairly small value, and if there is some noise or voltage surges, then our ADC signal will be very noisy because of this, he jumps all the time and we can't exactly measure something.
 
+* Also, one of the reasons for inaccuracies in the measurement may be overheating of the sensor and other components, but we do not take this into account and therefore this may affect the quality of the measurements.
+
 ## Software description
 
 Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
