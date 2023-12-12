@@ -18,22 +18,20 @@ Also, the advantage of our project is that we have made a library `adc` that can
 
 ## Hardware description of the demo application
 
-Measuring of current: we consider the current so that we know that the sensor outputs 2.5V, which means zero current , so we subtract 
+**Measuring of current:** we consider the current so that we know that the sensor outputs 2.5V, which means zero current , so we subtract 
 2.5V and divide by 185mV, this is the price of division, which we learned from the datasheet 185mV/1A. And as the last step, we add an offset 
 
 `current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off`
 
-Measuring of voltage: the voltage is calculated as the average voltage in milivolts multiplied by 1000
+**Measuring of voltage:** the voltage is calculated as the average voltage in milivolts multiplied by 1000
 
 `voltage_meas = value_avg*1000`
 
-Measuring of resistance: divide the voltage by the current, and subtract the reference resistance. This is done so that if suddenly we have some small resistance, we can add a large resistance to it in a series, then we can calculate the total current through them, respectively, at the end we subtract a large resistance
+**Measuring of resistance:** divide the voltage by the current, and subtract the reference resistance. This is done so that if suddenly we have some small resistance, we can add a large resistance to it in a series, then we can calculate the total current through them, respectively, at the end we subtract a large resistance
  
 `resistance_meas = REF_V / current_meas - REF_R`
 
-Measuring of capacitance:
-
-**!Dima pro kapacitu napishi sam pliz!**
+**Measuring of capacitance:**
 
 `capacitance_meas = value_avg`
 
