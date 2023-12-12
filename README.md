@@ -14,6 +14,8 @@ After learning the topic of our project, after much thought, we decided to inven
 
 Our device can measure current and voltage, which is the most important thing for a battery, moreover, we decided to increase the area of use of the device and we eventually got a kind of multimeter, because we can measure the resistance of components, we can measure capacitors, we can measure currents and voltages, and in the future it is possible to add a function for measurements of transistors . With the help of the sensor, we will be able to determine where the non-zero current flows and in this way check the operability of the transistors.
 
+Also, the advantage of our project is that we have made a library `adc` that can be used not only in our project, but also in others. Which greatly expand the range of use and usefulness.
+
 
 
 
