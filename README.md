@@ -6,7 +6,7 @@ Topic: Measuring Electricity
 
 * Dmitrii Semenov (responsible for debugging, C programing, hardware description)
 * Roman Lunin (responsible C programing, github design, software description)
-* Vladislav Karmanov (responsible for nothing)
+* Vladislav Karmanov (responsible for youtube blog and the author of the phrase: `"I'm sorry, sun"`)
 
 ## Theoretical description and explanation
 
@@ -24,13 +24,21 @@ Also, the advantage of our project is that we have made a library `adc` that can
 Measuring of current: we consider the current so that we know that the sensor outputs 2.5V, which means zero current , so we subtract 
 2.5V and divide by 185mV, this is the price of division, which we learned from the datasheet 185mV/1A. And as the last step, we add an offset 
 
-`current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;`;
+`current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off`
 
-Measuring of voltage:
+Measuring of voltage: the voltage is calculated as the average voltage in milivolts multiplied by 1000
 
-Measuring of resistance:
+`voltage_meas = value_avg*1000`
+
+Measuring of resistance: divide the voltage by the current, and subtract the reference resistance. This is done so that if suddenly we have some small resistance, we can add a large resistance to it in a series, then we can calculate the total current through them, respectively, at the end we subtract a large resistance
+ 
+`resistance_meas = REF_V / current_meas - REF_R`
 
 Measuring of capacitance:
+
+!Dima pro kapacitu napishi sam pliz!
+
+`capacitance_meas = value_avg`
 
 
 
@@ -91,7 +99,7 @@ Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`,
 
 * blok `int main(void)` - this is the setting of the ADC converter, so that there is a correct reference, so that everything is correctly active, the input is selected (configuration of the adc)
 
-* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.(Dima chekni nujno li eto ili naxyi)
+* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.(Dima posmotri nado li eto ili naxyi ne nado)
 
 * blok `ISR(INT0_vect)` - button monitor
 
