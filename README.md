@@ -23,6 +23,7 @@ Our proposed device can measure two basic parameters, voltage and current, which
 **Measuring of current:** According to the datasheet, the current sensor has a VCC/2 voltage on the output in a case with zero current. In our case, vCC equals 5 Volts, since we use Arduino internal voltage. To calculate the current, we transform the ADC value into volts, then subtract 2.5V and divide by sensitivity, which equals 185mV. Finally, we add an offset that may be present (or equals 0 if the sensor has no offset). One important thing is that we used the averaging process to cancel the noise from ADC. The average setup (number of averages) can be set by a global variable `AVERAGE_FACTOR`. If the value is "1", the average is disabled, and there is a note on the display "AVERAGE OFF". Otherwise, there is a note "AVERAGE ON". We recommend using at least 10 average steps for an accurate measurement. The code adjusts the display of voltage in `mA` or `A` according to its absolute value (>1A => display in A, otherwise in mA). The final equation for a current calculation is:
 
 `current_meas = ((ADC_avg*(5.00/1024.00)*1000.00)-2500.00)/185.00 + Sensor_Off`
+$$I = (ADC_{avg} \cdot \frac{5000}{1024} - 2500)/185$$
 
 **Measuring of voltage:** The voltage is calculated directly from the ADC averaged value. The code adjusts the display of voltage in `mV`
  or `V` as well, according to its absolute value (>1V => display in V, otherwise in mV). The total equation is:
@@ -53,8 +54,6 @@ Circuit of a `bandgap` reference:
 ## Software description
 
 **adc:**
-
-* [adc.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.c)
 
 * [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.h)
 
