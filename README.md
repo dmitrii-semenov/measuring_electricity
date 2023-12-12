@@ -39,6 +39,9 @@ Circuit of a `bandgap` reference:
 
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Bandgap-reference.svg.png" width="300" height="300">
 
+
+* The sensor has a conversion scale of 185 millivolts per ampere, and at the same time we use ADC, which has only 1024 values per 5 volts, this means that the ADC has a division scale of only 5 millivolts, this is a fairly small value, and if there is some noise or voltage surges, then our ADC signal will be very noisy Because of this, he jumps all the time and we can't exactly measure something.
+
 ## Software description
 
 Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
