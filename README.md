@@ -106,6 +106,8 @@ Here the block diagram of the whole process is presented:
 
 `Voltage Measurement`:
 
+Don't forget to connect the GND net with the Arduino ground! Otherwise, the voltage may be shifted from the actual value.
+
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/V.jpeg" width="300" height="300">
 
 `Resistance Measurement`:
@@ -113,6 +115,7 @@ Here the block diagram of the whole process is presented:
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/R.jpeg" width="300" height="320">
 
 `Capacity Measurement`:
+
 If you would like to measure capacitance, fully discharge the capacitor before connecting to the circuit!
 
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/C.jpeg" width="400" height="300">
