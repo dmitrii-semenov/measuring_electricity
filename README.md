@@ -66,12 +66,17 @@ In the `main.c` file, we have global variables involved:
 
 * `REF_V` - reference voltage for calculations;
 * `REF_R` - reference resistance for calculations;
+
+
+Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`, we have done averaging, which will stabilize the values very well, this will greatly help in improving the measurement accuracy. We did this in such a way that the user can set himself what amount of averaging he wants (how much he wants to average the value).
+
+
 ## Instructions
 
 Write an instruction manual for your application, including photos and a link to a short app video.
 1. The first step is to perform a calibration measurement in order to understand the offset and set it in the program;
 2. Before starting the measurement, you need to check which voltage you have;
-3. Set the `Average factor`;
+3. Set the `AVERAGE_FACTOR`;
 4. Set the value of the reference resistor;
 5. Connect the desired circuit, depending on what value you want to measure (current, voltage, resistance, capacitance);
 6. Turn on the device;
