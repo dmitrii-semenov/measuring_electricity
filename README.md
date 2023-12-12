@@ -45,6 +45,13 @@ Put flowcharts of your algorithm(s) and direct links to source files in `src` or
 
 * [code_functions.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.h)
 
+
+**adc:**
+
+* [adc.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.c)
+
+* [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.h)
+
 To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
 
 In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
