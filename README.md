@@ -1,6 +1,6 @@
 # Project in C
 
-Topic: Measuring Electricity
+opic: Measuring Electricity
 
 ### Team members
 
