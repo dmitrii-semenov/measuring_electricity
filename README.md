@@ -52,54 +52,82 @@ However, there are some accuracy problems that we have detected during the proje
 
 ## Software description
 
-Our custom [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/include/adc.h) library made for help with ADC operations.
+Our custom [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/include/adc.h) library made for help with ADC operations. There, it is possible to choose voltage reference (1.1V VBG or 5V VCC), the prescaler configuration (2,4,8,16,32,64,128), pick the input pin for ADC (analog pins and direct output from onboard temperature sensor) and enable it.
 
-Main source file [main.c file](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/src/main.c) with the core code.
+Main source file [main.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/src/main.c) with the core code.
 
 Regarding other used libraries, we used `timer.h` (for timers and interruptions), `gpio` (pins management), `oled` (OLED display functions), `twi` (library needed for OLED desiplay). 
 
-In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
+We also used an internally-declared function `Clear_values` to clear the values from the display. However, this function is a very specific for our display configuration and it can't be widely ised in other projects. That's why we decided NOT to put it into the separate file/library.
 
-Since we chose the way to solve our project using adc, in order to configure the registers and the adc function, we needed to make a new library `adc` where the registers for adc are written and where the names of the functions that we will use are simply written. The library also consists of 2 parts, in `adc.h `part the names of the functions are simply spelled out, and in the `adc.c` part registers are added to the functions(Library with custom ADC functions).
+In the `main.c` file, we have declared some global variables: 
+* `mode`(mode of measurement) - used to switch between different modes of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
+* `SW_ena`(button sensor) - this is the variable used for the button control, if the value of `SW_ena` higher than '0' it means that the button was pressed and the circuit should switch to the next mode, if the value is '0' - the button wasn't pressed;
+* `Sensor_Off` - this is the offset of the sensor, needed if there is an error(shift) in the ADC or in the sensor and it doesn't hold 2.5V at the output in idle mode(at zero current), then some current can be added to this variable, which will shift the result (used for calibration);
+* `ADC_avg` - the variable with the averaged value of the ADC converter(averaged ADC value);
+* `Cap_charge` - variable where the total charge of the capacitor is written (for capacity calculation);
 
-In the `main.c` file, we have global variables involved: 
-* `mode`(mode of measurement) - the first variable is used to switch the mode of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
-* `SW_ena`(button sensor) - this is the signal used for the button, if the `SW_ena` is in one(1) it means that the button is pressed, if it is at zero(0) it means that the button is not pressed;
-* `Sensor_Off` - this is the offset of the sensor, if we assume that there is some kind of error in the ADC or in the sensor and it does not output 2.5V at zero current, then some current can be clamped as this variable, which will work as an offset(used for calibration);
-* `ADC_avg` - the variable into which the averaged value of the ADC converter is mapped(averaged ADC value);
+Also there are some parameters, that need to be defined by a user:
 
-* `AVERAGE_FACTOR` - determines how many measurements we will average in the adc. If it is equal to 1, then there is no averaging, every time the adc outputs a new value, we use it, but the adc has a lot of noise, and therefore if 1 is used, the output value jumps very much. Therefore, it is recommended to use 10. First, 10 values will be measured ,the average value will be given out of them , and so on over and over again;
+* `AVERAGE_FACTOR` - positive integer, determines how many measurements are averaged in the ADC. If it is equal to '1', then there is no averaging, and a string `AVERAGE OFF` is displaying. Otherwise, there is a note `AVERAGE ON`. We highly recommend to use at least 10 averages. In that case, the measurements will be delayed (since 10 values need to be measured, and only then result will be displayed), but it will decrease the noise level (but wouldn't eliminate it)
 
-* `REF_V` - reference voltage for calculations;
-* `REF_R` - reference resistance for calculations;
+* `REF_V` - reference voltage for calculations, typically 5V (if connected to the Arduino internal voltage reference). This is a voltage at which capacitor is charged, or to which resistive load is connected.
 
+* `REF_R` - reference resistance for calculations, used if there is a reference resistance in series with the measured one. Otherwise equals to`0`.
 
-Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`, we have done averaging, which will stabilize the values very well, this will greatly help in improving the measurement accuracy. We did this in such a way that the user can set himself what amount of averaging he wants (how much he wants to average the value).
+Then we divided the whole code into several major subblocks. 
 
-* blok `int main(void)` - this is the setting of the ADC converter, so that there is a correct reference, so that everything is correctly active, the input is selected (configuration of the adc)
+* In block `ISR(TIMER0_OVF_vect)`, we have perform averaging. Note, that overflows were added to guarantee the enough time for ADC to get measured value.
 
-* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.**(Dima posmotri nado li eto ili naxyi ne nado)**
+* Block `main(void)` - Here the configuration of the ADC converter with the initial display interface and interruptions setup is located.
 
-* blok `ISR(INT0_vect)` - button monitor
+* Block `ISR(INT0_vect)` - Button monitor, add '1' to `SW_ena` once button was pressed.
 
-* blok `ISR(TIMER0_OVF_vect)` - we read the value from the adc once every 50ms. We read one value, and we increase number of average, we read the value and add to `ADC_avg_internal` this value divided by the number of averages. And as soon as we reach the required number of averages, which is determined by the user, then we skip the signal ADC internal to ADC avg.
+* Blok `ISR(TIMER1_OVF_vect)` - Here the status of button is checked. If button was pressed, the circuit transfers to the next measurement mode by changing the variable `mode` in the range 0 - 3.
 
-* blok `ISR(TIMER1_OVF_vect)` - it is responsible for the button, it is triggered once every third of a second. He looks at whether the button has been pressed at least once during this time. If yes, then it switches the mode to the next measurement mode.
-* blok `ISR(ADC_vect)` - the calculation itself is already happening here. As soon as an ADC signal appears, we convert it to voltage. For calculations, we use the average value, then we count the current, then we count the resistance and capacitance.
+* Blok `ISR(ADC_vect)` - The calculations are performed here according to the current measurement mode. After the calculation is done, the result is plotted on the display and display is activated.  
 
 ## Instructions
 
-Write an instruction manual for your application, including photos and a link to a short app video.
-1. The first step is to perform a calibration measurement in order to understand the offset and set it in the program;
-2. Before starting the measurement, you need to check which voltage you have;
-3. Set the `AVERAGE_FACTOR`;
-4. Set the value of the reference resistor;
-5. Connect the desired circuit, depending on what value you want to measure (current, voltage, resistance, capacitance);
-6. Turn on the device;
-7. Use the button to select the mode to measure the desired value;
-8. Now wait a bit , the measurement is being carried out;
+1. The first step is to perform a calibration measurement to change the offset variable `Sensor_Off`;
+2. Connect the desired circuit, depending on what type of measurement you want to perform. The proposed circuits are:
+
+`Current Measurement`:
+
+***
+
+`Voltage Measurement`:
+
+***
+
+`Resistance Measurement`:
+
+***
+
+`Capacity Measurement`:
+If you would like to measure capacitance, fully discharge the capacitor before connecting to the circuit!
+
+***
+
+3. Set the `AVERAGE_FACTOR` (recommended 10);
+4. Set the value of the reference resistor (if used, '0' if not used);
+5. Set the value of the reference voltage (5V by default);
+6. Turn on the device by uploading code/connecting supply voltage to arduino;
+7. Use the button to select the measurement mode;
+8. If average factor is used, wait till the results are appear on screen (time depends on the value of `AVERAGE_FACTOR`);
+9. If you measure a capacitance value, wait till the ADC value equals to the idle value (512), which means that capacitor is fully charged and there is no current flowing through it;
+
+## Video demonstration
+Here, the video demonstration is uploaded, where you can see the functionality of our device.
+
+***
+
+Note: the capacity measurement mode was not ready at the moment of video recording, this was demonstrated personally during the 13th week of semester.
 
 ## References
 
-1. Write your text here.
-2. ...
+1. Microchip Techbology Inc. [ATmega328P datasheet](https://www.microchip.com/en-us/product/ATmega328p)
+2. Components101. [Introduction to Analog to Digital Converters (ADC Converters)](https://components101.com/articles/analog-to-digital-adc-converters)
+3. Sparkfun electronics. [LM7805 datasheet](https://www.sparkfun.com/datasheets/Components/LM7805.pdf)
+4. Sparkfun electronics. [ACS712 datasheet](https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf)
+5. Tomas Fryza. [Useful Git commands](https://github.com/tomas-fryza/digital-electronics-2/wiki/Useful-Git-commands)
