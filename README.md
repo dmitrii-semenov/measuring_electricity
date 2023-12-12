@@ -23,6 +23,7 @@ Also, the advantage of our project is that we have made a library `adc` that can
 
 Measuring of current: we consider the current so that we know that the sensor outputs 2.5V, which means zero current , so we subtract 
 2.5V and divide by 185mV, this is the price of division, which we learned from the datasheet 185mV/1A. And as the last step, we add an offset 
+
 `current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;`;
 
 Measuring of voltage:
