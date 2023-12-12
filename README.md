@@ -34,7 +34,7 @@ $$R = \frac{REF_V}{I} - REF_R$$
 
 **Measuring of capacitance:** Capacitance is measured according to its definition. For a capacitor, the capacitance equals the charge divided by voltage. Thus, if we apply a known voltage (5V `REF_V`) to the **discharged!** capacitor, the integral of its current in the time domain equals its charge. We know that during the charging process, the current through the capacitor decreases exponentially, so after the measurement is started, a user should wait an appropriate amount of time for current stabilization. The code adjusts the measured value is well, displaying it in `uF`, `mF` or `F`. the total equation is:
 
-`capacitance_meas = value_avg`
+$$C = \frac{1}{REF_V} \cdot \sum_{t=0}^{t=n}I_n$$
 
 ## Accuracy issues
 
