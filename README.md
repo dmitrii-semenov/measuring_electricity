@@ -67,7 +67,7 @@ In the `main.c` file, we have declared some global variables:
 * `ADC_avg` - the variable with the averaged value of the ADC converter(averaged ADC value);
 * `Cap_charge` - variable where the total charge of the capacitor is written (for capacity calculation);
 
-Also there are some parameters, that need to be defined by a user:
+Also, there are some parameters, that need to be defined by a user:
 
 * `AVERAGE_FACTOR` - positive integer, determines how many measurements are averaged in the ADC. If it is equal to '1', then there is no averaging, and a string `AVERAGE OFF` is displayed. Otherwise, there is a note `AVERAGE ON`. We highly recommend using at least 10 averages. In that case, the measurements will be delayed (since 10 values need to be measured, and only then result will be displayed), but it will decrease the noise level (but wouldn't eliminate it)
 
@@ -86,6 +86,10 @@ Then we divided the whole code into several major subblocks.
 * Blok `ISR(TIMER1_OVF_vect)` - Here the status of the button is checked. If the button is pressed, the circuit transfers to the next measurement mode by changing the variable `mode` in the range 0 - 3.
 
 * Blok `ISR(ADC_vect)` - The calculations are performed here according to the current measurement mode. After the calculation is done, the result is plotted on the display and the display is activated.  
+
+Here the block diagram of the whole process is presented:
+
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Block_diag.jpeg" width="300" height="1200">
 
 ## Instructions
 
