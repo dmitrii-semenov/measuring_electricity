@@ -1,6 +1,6 @@
 # Project in C
 
-opic: Measuring Electricity
+Topic: Measuring Electricity
 
 ### Team members
 
@@ -102,20 +102,20 @@ Here the block diagram of the whole process is presented:
 
 `Current Measurement`:
 
-***
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/I.jpeg" width="300" height="450">
 
 `Voltage Measurement`:
 
-***
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/U.jpeg" width="300" height="450">
 
 `Resistance Measurement`:
 
-***
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/R.jpeg" width="300" height="450">
 
 `Capacity Measurement`:
 If you would like to measure capacitance, fully discharge the capacitor before connecting to the circuit!
 
-***
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/C.jpeg" width="300" height="450">
 
 3. Set the `AVERAGE_FACTOR` (recommended 10);
 4. Set the value of the reference resistor (if used, '0' if not used);
