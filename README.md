@@ -36,7 +36,7 @@ Measuring of resistance: divide the voltage by the current, and subtract the ref
 
 Measuring of capacitance:
 
-!Dima pro kapacitu napishi sam pliz!
+**!Dima pro kapacitu napishi sam pliz!**
 
 `capacitance_meas = value_avg`
 
@@ -99,7 +99,7 @@ Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`,
 
 * blok `int main(void)` - this is the setting of the ADC converter, so that there is a correct reference, so that everything is correctly active, the input is selected (configuration of the adc)
 
-* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.(Dima posmotri nado li eto ili naxyi ne nado)
+* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.**(Dima posmotri nado li eto ili naxyi ne nado)**
 
 * blok `ISR(INT0_vect)` - button monitor
 
