@@ -28,7 +28,10 @@ Our proposed schematic of the circuit for Bipolar Junction Transistor (BJT) test
 
 $$I = (ADC_{avg} \cdot \frac{5000}{1024} - 2500)/185$$
 
+C syntax:
+
 ``` c
+    value_avg = ADC_avg*(5.00/1024.00); 
     current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;
 ```
 
@@ -36,13 +39,35 @@ $$I = (ADC_{avg} \cdot \frac{5000}{1024} - 2500)/185$$
 
 $$V = ADC_{avg} \cdot \frac{5}{1024}$$
 
+C syntax:
+
+``` c
+    value_avg = ADC_avg*(5.00/1024.00); 
+    voltage_meas = value_avg*1000;
+```
+
 **Measuring of resistance:** Resistance is calculated as a division of reference voltage `REF_V` (5V by default) and measured current. If additional resistance is used in the series connection with the measured one, its value should be assigned to the global variable `REF_R`. The code adjusts the display of resistance in `kO` (kiloOhms) or `O` (Ohms), according to its absolute value (>1000 Ohms => display in kO, otherwise in O). The total equation is:
  
 $$R = \frac{V_{ref}}{I} - R_{ref}$$
 
+C syntax:
+
+``` c
+    value_avg = ADC_avg*(5.00/1024.00); 
+    current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;
+    resistance_meas = REF_V / current_meas - REF_R;
+```
+
 **Measuring of capacitance:** Capacitance is measured according to its definition. For a capacitor, the capacitance equals the charge divided by voltage. Thus, if we apply a known voltage (5V `REF_V`) to the **discharged!** capacitor, the integral of its current in the time domain equals its charge. We know that during the charging process, the current through the capacitor decreases exponentially, so after the measurement is started, a user should wait an appropriate amount of time for current stabilization. The code adjusts the measured value, displaying it in `uF`, `mF` or `F`. The total equation is:
 
 $$C = \frac{1}{V_{ref}} \cdot \sum_{t=0}^{t=n}I_n \cdot \Delta t$$
+
+``` c
+    value_avg = ADC_avg*(5.00/1024.00); 
+    current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;
+    Cap_charge = Cap_charge + current_meas*0.05; 
+    capacitance_meas = 1000000.00 * Cap_charge / 5.00;
+```
 
 Our final proposed design looks as follows:
 
