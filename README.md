@@ -104,6 +104,30 @@ Also, there are some parameters, that need to be defined by a user:
 
 * `AVERAGE_FACTOR` - positive integer, determines how many measurements are averaged in the ADC. If it is equal to '1', then there is no averaging, and a string `AVERAGE OFF` is displayed. Otherwise, there is a note `AVERAGE ON`. We highly recommend using at least 10 averages. In that case, the measurements will be delayed (since 10 values need to be measured, and only then result will be displayed), but it will decrease the noise level (but wouldn't eliminate it)
 
+Average process C syntax:
+``` c
+    ISR(TIMER0_OVF_vect)                                                        // ADC value read every 50ms
+    {
+    static uint8_t no_of_overflows = 0;
+    static uint8_t no_average = 0;
+    no_of_overflows++;
+    if (no_of_overflows >= 3)                                               // Triggers every 3 x 16 ms = 50 ms
+    {
+        no_of_overflows = 0;
+        no_average++;
+        ADC_read                                                            // Read ADC value
+        ADC_avg_internal = ADC_avg_internal + ADC/AVERAGE_FACTOR;           // Calculate average ADC value
+        if (no_average >= AVERAGE_FACTOR)                                   // Sent calculated value to "ADC_avg"
+        {
+            no_average = 0;
+            ADC_avg = ADC_avg_internal;
+            ADC_avg_internal = 0;
+        }
+
+    }    
+    }
+```
+
 * `REF_V` - reference voltage for calculations, typically 5V (if connected to the Arduino internal voltage reference). This is the voltage at which the capacitor is charged, or to which the resistive load is connected.
 
 * `REF_R` - reference resistance for calculations, used if there is a reference resistance in series with the measured one. Otherwise equals to`0`.
