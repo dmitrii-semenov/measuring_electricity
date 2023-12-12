@@ -4,20 +4,17 @@ Topic: Measuring Electricity
 
 ### Team members
 
-* Dmitrii Semenov (responsible for debugging, C programing, hardware description)
-* Roman Lunin (responsible C programing, github design, software description)
-* Vladislav Karmanov (responsible for youtube blog and the author of the phrase: `"I'm sorry, sun"`)
+* Dmitrii Semenov (responsible for debugging, C programming, and hardware description)
+* Roman Lunin (responsible for C programming, Github design, and software description)
+* Vladislav Karmanov (responsible for documentation, Github design, library `adc`)
 
 ## Theoretical description and explanation
 
-After learning the topic of our project, after much thought, we decided to invent a device that can measure electrical quantities. To implement our idea, we needed a current sensor, which we were given initially. We wanted to make a decent interface so that measurements could be conveniently and intuitively controlled, so we used the display and the button to switch modes. After that, we had a question about implementation, how can we do this? The only option was to use `ADC`(Analog digital converter), since we cannot use an `analogRead`. We studied how it works, looked at which registers are used and did it in such a way as to read from the input analog pin (in our case A0), and subsequently process them in some way. After that, we implemented blocks to control the button, to switch modes. We have made a FSM(Finite State Machine) that switches between 4 modes. Each mode corresponds to a measurement of one value.
+The main idea is to invent a device that can measure electrical quantities (we were inspired by making a custom multimeter). To implement our idea, we used a current sensor [ACS712](https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf) with a 5A measurement limit. We wanted to make a decent interface so that measurements could be conveniently and intuitively controlled, so we used the display and the button to switch modes. After that, we had a question about implementation, how can we do this? The only option was to use `ADC`(Analog digital converter), since we cannot use an `analogRead`. We studied how it works, looked at which registers are used and did it in such a way as to read from the input analog pin (in our case A0), and subsequently process them in some way. After that, we implemented blocks to control the button, to switch modes. We have made a FSM(Finite State Machine) that switches between 4 modes. Each mode corresponds to a measurement of one value.
 
 Our device can measure current and voltage, which is the most important thing for a battery, moreover, we decided to increase the area of use of the device and we eventually got a kind of multimeter, because we can measure the resistance of components, we can measure capacitors, we can measure currents and voltages, and in the future it is possible to add a function for measurements of transistors . With the help of the sensor, we will be able to determine where the non-zero current flows and in this way check the operability of the transistors.
 
 Also, the advantage of our project is that we have made a library `adc` that can be used not only in our project, but also in others. Which greatly expand the range of use and usefulness.
-
-
-
 
 ## Hardware description of the demo application
 
