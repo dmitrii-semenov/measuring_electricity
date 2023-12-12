@@ -10,16 +10,17 @@ Topic: Measuring Electricity
 
 ## Theoretical description and explanation
 
-The main idea is to invent a device that can measure electrical quantities (we were inspired by making a custom multimeter). To implement our idea, we used a current sensor [ACS712](https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf) with a 5A measurement limit. We aimed to make a decent interface so that measurements could be conveniently and intuitively controlled, so we used the OLED display and the button to choose a measurement mode. Since the usage of Arduino frameworks is strictly forbidden, the only option to "read" a value from the current sensor was to use `ADC`(Analog Digital Converter), which could convert an analog value from the analog input pin to the digital value. We deeply researched how it works, and using [ATmega328P](https://www.microchip.com/en-us/product/ATmega328p) specification, we were able to configure the internal registers in a way to read the values from the input analog pin (in our case A0), and subsequently process the obtained value. After that, we implemented blocks to control the button (button controller), and to switch modes. For the latter, we have made an FSM (Finite State Machine) that switches between 4 modes. Each mode corresponds to a measurement of one value (current, voltage, resistance and caapcitance).
+The main idea is to design a device that can measure electrical quantities (we were inspired by making a custom multimeter). To implement our idea, we used a current sensor [ACS712](https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf) with a 5A measurement limit. We aimed to make a decent interface so that measurements could be conveniently and intuitively controlled, so we used the OLED display and the button to choose a measurement mode. Since the usage of Arduino frameworks is strictly forbidden, the only option to "read" a value from the current sensor was to use `ADC`(Analog Digital Converter), which could convert an analog value from the analog input pin to the digital value. We deeply researched how it works, and using [ATmega328P](https://www.microchip.com/en-us/product/ATmega328p) specification, we were able to configure the internal registers in a way to read the values from the input analog pin (in our case A0), and subsequently process the obtained value. After that, we implemented blocks to control the button (button controller), and to switch modes. For the latter, we have made an FSM (Finite State Machine) that switches between 4 modes. Each mode corresponds to a measurement of one value (current, voltage, resistance and capacitance).
 
-Our device can measure current and voltage, which is the most important thing for a battery, moreover, we decided to increase the area of use of the device and we eventually got a kind of multimeter, because we can measure the resistance of components, we can measure capacitors, we can measure currents and voltages, and in the future it is possible to add a function for measurements of transistors . With the help of the sensor, we will be able to determine where the non-zero current flows and in this way check the operability of the transistors.
+Moreover, we have developed a custom library `adc`, its use is not limited to our project: it contains basic functions for ADC configuration, so it can be used in many other projects, helping their creators.
 
-Also, the advantage of our project is that we have made a library `adc` that can be used not only in our project, but also in others. Which greatly expand the range of use and usefulness.
+## Application
+
+Our proposed device can measure two basic parameters, voltage and current, which are essential for power management in batteries. Furthermore, we decided to increase the application area of the device and we developed advanced functions, such as resistance and capacity measurement. It can be used in even more advanced applications, such as verification of BJT and MOS transistors (a high potential on base, resp. gate can be applied and current on emitor, resp. source can be measured). One of the potential applications - is an overcurrent sensor. Once the current exceeds the threshold within 5A, this sensor may activate the safety mechanism and turn off the flow of current.
 
 ## Hardware description of the demo application
 
-**Measuring of current:** we consider the current so that we know that the sensor outputs 2.5V, which means zero current , so we subtract 
-2.5V and divide by 185mV, this is the price of division, which we learned from the datasheet 185mV/1A. And as the last step, we add an offset 
+**Measuring of current:** According to the datasheet, the current sensor has a VCC/2 voltage on the output in a case with zero current. In our case, vCC equals 5 Volts, since we use Arduino internal voltage. To calculate the current, we transform the ADC value into volts, then subtract 2.5V and divide by sensitivity, which equals 185mV. Finally, we add an offset that may be present (or equals 0 if the sensor has no offset). One important thing is that we used the averaging process to cancel the noise from ADC. The average setup (number of averages) can be set by a global variable `AVERAGE_FACTOR`. If the value is "1", the average is disabled, and there is a note on the display "AVERAGE OFF". Otherwise, there is a note "AVERAGE ON". We recommend using at least 10 average steps for an accurate measurement. The final equation for a current calculation is:
 
 `current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off`
 
@@ -61,7 +62,6 @@ Put flowcharts of your algorithm(s) and direct links to source files in `src` or
 
 * [code_functions.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.h)
 
-
 **adc:**
 
 * [adc.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.c)
@@ -102,7 +102,6 @@ Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`,
 
 * blok `ISR(TIMER1_OVF_vect)` - it is responsible for the button, it is triggered once every third of a second. He looks at whether the button has been pressed at least once during this time. If yes, then it switches the mode to the next measurement mode.
 * blok `ISR(ADC_vect)` - the calculation itself is already happening here. As soon as an ADC signal appears, we convert it to voltage. For calculations, we use the average value, then we count the current, then we count the resistance and capacitance.
-
 
 ## Instructions
 
