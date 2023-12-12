@@ -10,9 +10,9 @@ Topic: Measuring Electricity
 
 ## Theoretical description and explanation
 
-To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
+After learning the topic of our project, after much thought, we decided to invent a device that can measure electrical quantities. To implement our idea, we needed a current sensor, which we were given initially. We wanted to make a decent interface so that measurements could be conveniently and intuitively controlled, so we used the display and the button to switch modes. After that, we had a question about implementation, how can we do this? The only option was to use `ADC`(Analog digital converter), since we cannot use an `analogRead`. We studied how it works, looked at which registers are used and did it in such a way as to read from the input analog pin (in our case A0), and subsequently process them in some way. After that, we implemented blocks to control the button, to switch modes. We have made an automaton that switches between 4 modes. Each mode corresponds to a measurement of one value.
 
-In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
+Our device can measure current and voltage, which is the most important thing for a battery, moreover, we decided to increase the area of use of the device and we eventually got a kind of multimeter, because we can measure the resistance of components, we can measure capacitors, we can measure currents and voltages, and in the future it is possible to add a function for measurements of transistors . With the help of the sensor, we will be able to determine where the non-zero current flows and in this way check the operability of the transistors.
 
 
 
@@ -48,6 +48,9 @@ Circuit of a `bandgap` reference:
 
 Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
 
+To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
+
+In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
 ## Instructions
 
 Write an instruction manual for your application, including photos and a link to a short app video.
