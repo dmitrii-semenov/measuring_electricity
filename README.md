@@ -20,7 +20,9 @@ Our proposed device can measure two basic parameters, voltage and current, which
 
 Our proposed schematic of the circuit for Bipolar Junction Transistor (BJT) testing:
 
-## Hardware description of the demo application
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/tran.jpeg" width="300" height="450">
+
+## Hardware description
 
 **Measuring of current:** According to the datasheet, the current sensor has a VCC/2 voltage on the output in a case with zero current. In our case, vCC equals 5 Volts, since we use Arduino internal voltage. To calculate the current, we transform the ADC value into volts, then subtract 2.5V and divide by sensitivity, which equals 185mV. Finally, we add an offset that may be present (or equals 0 if the sensor has no offset). One important thing is that we used the averaging process to cancel the noise from ADC. The average setup (number of averages) can be set by a global variable `AVERAGE_FACTOR`. If the value is "1", the average is disabled, and there is a note on the display "AVERAGE OFF". Otherwise, there is a note "AVERAGE ON". We recommend using at least 10 average steps for an accurate measurement. The code adjusts the display of voltage in `mA` or `A` according to its absolute value (>1A => display in A, otherwise in mA). The final equation for a current calculation is:
 
