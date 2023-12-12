@@ -39,12 +39,11 @@ Circuit of a `bandgap` reference:
 
 Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
 
-**code_functions.c:**
+**code_functions:**
 
-* [lib folder](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.c)
+* [code_functions.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.c)
 
-**code_functions.h:**
-* [lib folder](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.h)
+* [code_functions.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.h)
 
 To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
 
