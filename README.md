@@ -89,7 +89,7 @@ Then we divided the whole code into several major subblocks.
 
 Here the block diagram of the whole process is presented:
 
-<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Block_diag.jpeg" width="300" height="1200">
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Block_diag.jpeg" width="200" height="800">
 
 ## Instructions
 
