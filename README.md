@@ -32,22 +32,23 @@ $$V = ADC_{avg} \cdot \frac{5}{1024}$$
  
 $$R = \frac{V_{ref}}{I} - R_{ref}$$
 
-**Measuring of capacitance:** Capacitance is measured according to its definition. For a capacitor, the capacitance equals the charge divided by voltage. Thus, if we apply a known voltage (5V `REF_V`) to the **discharged!** capacitor, the integral of its current in the time domain equals its charge. We know that during the charging process, the current through the capacitor decreases exponentially, so after the measurement is started, a user should wait an appropriate amount of time for current stabilization. The code adjusts the measured value is well, displaying it in `uF`, `mF` or `F`. the total equation is:
+**Measuring of capacitance:** Capacitance is measured according to its definition. For a capacitor, the capacitance equals the charge divided by voltage. Thus, if we apply a known voltage (5V `REF_V`) to the **discharged!** capacitor, the integral of its current in the time domain equals its charge. We know that during the charging process, the current through the capacitor decreases exponentially, so after the measurement is started, a user should wait an appropriate amount of time for current stabilization. The code adjusts the measured value, displaying it in `uF`, `mF` or `F`. The total equation is:
 
 $$C = \frac{1}{V_{ref}} \cdot \sum_{t=0}^{t=n}I_n \cdot \Delta t$$
 
-## Accuracy issues
-
-* Firstly, due to the fact that the arduino can be powered externally and from the USB port, there is a 5V voltage stabilizer, but it does not cope well with its function and therefore the voltage can jump by +- 250 mV, and it follows that the voltage jumps on the sensor itself and this makes an error in measurement of quantities. Secondly, the accuracy of the adu drive deteriorates because if the voltage jumps, then the entire scale jumps. As a result, 5V are unstable, and this means that the sensor will have its middle shifted, that is, it will output some other value at zero current and because of this our device will not work correctly. Theoretically, we could solve this problem with the help of bandgap(VBG), but this will not work because of the structure of the sensor, because we need to read 2.5V and more.
-
-Circuit of a `bandgap` reference:
+Our final proposed design looks as follows:
 
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Bandgap-reference.svg.png" width="300" height="300">
 
+## Accuracy issues
 
-* The sensor has a conversion scale of `185mV/A`, and at the same time we use ADC, which has only `1024 values/5V`, this means that the ADC has a division scale of only 5mV, this is a fairly small value, and if there is some noise or voltage surges, then our ADC signal will be very noisy because of this, he jumps all the time and we can't exactly measure something.
+However, there are some accuracy problems that we have detected during the project:
 
-* Also, one of the reasons for inaccuracies in the measurement may be overheating of the sensor and other components, but we do not take this into account and therefore this may affect the quality of the measurements.
+* We power Arduino Uno externally via a USB port. On the Arduino board, there is a 5V voltage stabilizer, but it is not an ideal stabilizer. According to the datasheet of a stabilizer [LM7805](https://www.sparkfun.com/datasheets/Components/LM7805.pdf), that is used in Arduino, the output voltage has a tolerance range of 4.8 - 5.2V. This affects the accuracy of the ADC block and the measurement itself. We tried to use the bandgap voltage reference (VBG), available in the Arduino board. However, the ADC measurement range would be limited to 1.1V (VBG voltage), which is not enough for decoding the current sensor value (since it has a 2.5V on the output in idle mode). That's why we had to use the internal 5V reference and thus, we worked with a "noisy" IDC block.
+
+* The current sensor, that we used, has a conversion scale of `185mV/A`, and at the same time, ADC with 5V reference has a step of approximately 5 mV. (1024 values/5V). This means, that only 37 ADC steps are inside a relative change for 1A (a 27 mA step in one ADC step). This would not only strictly limit the range of ADC we use(for a 5A sensor, the output voltage within the range 1.575V (322 in ADC) - 3.425V(702 in ADC)), but would limit the minimum current we can measure. Assuming, that ADC has a &plusmn; 12 mV Worst-Cade [error](https://forum.allaboutcircuits.com/threads/arduino-uno-adc-accuracy.144622/#:~:text=The%20error%20level%20of%20the,correctly%20read%200%20and%205000mV.), it would add a &plusmn; 65 mA error. As a result, such small currents can't be measured at all and we recommend using the proposed device with a minimum level of `100 mA`.  
+
+* Finally, the sensor overheating (because it has a close to zero, but non-zero resistance) also impacts measurement accuracy. Thus, measuring big currents may be problematic because of this.
 
 ## Software description
 
