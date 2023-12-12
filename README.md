@@ -20,24 +20,22 @@ Our proposed device can measure two basic parameters, voltage and current, which
 
 ## Hardware description of the demo application
 
-**Measuring of current:** According to the datasheet, the current sensor has a VCC/2 voltage on the output in a case with zero current. In our case, vCC equals 5 Volts, since we use Arduino internal voltage. To calculate the current, we transform the ADC value into volts, then subtract 2.5V and divide by sensitivity, which equals 185mV. Finally, we add an offset that may be present (or equals 0 if the sensor has no offset). One important thing is that we used the averaging process to cancel the noise from ADC. The average setup (number of averages) can be set by a global variable `AVERAGE_FACTOR`. If the value is "1", the average is disabled, and there is a note on the display "AVERAGE OFF". Otherwise, there is a note "AVERAGE ON". We recommend using at least 10 average steps for an accurate measurement. The final equation for a current calculation is:
+**Measuring of current:** According to the datasheet, the current sensor has a VCC/2 voltage on the output in a case with zero current. In our case, vCC equals 5 Volts, since we use Arduino internal voltage. To calculate the current, we transform the ADC value into volts, then subtract 2.5V and divide by sensitivity, which equals 185mV. Finally, we add an offset that may be present (or equals 0 if the sensor has no offset). One important thing is that we used the averaging process to cancel the noise from ADC. The average setup (number of averages) can be set by a global variable `AVERAGE_FACTOR`. If the value is "1", the average is disabled, and there is a note on the display "AVERAGE OFF". Otherwise, there is a note "AVERAGE ON". We recommend using at least 10 average steps for an accurate measurement. The code adjusts the display of voltage in `mA` or `A` according to its absolute value (>1A => display in A, otherwise in mA). The final equation for a current calculation is:
 
-`current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off`
+`current_meas = ((ADC_avg*(5.00/1024.00)*1000.00)-2500.00)/185.00 + Sensor_Off`
 
-**Measuring of voltage:** the voltage is calculated as the average voltage in milivolts multiplied by 1000
+**Measuring of voltage:** The voltage is calculated directly from the ADC averaged value. The code adjusts the display of voltage in `mV`
+ or `V` as well, according to its absolute value (>1V => display in V, otherwise in mV). The total equation is:
 
-`voltage_meas = value_avg*1000`
+$`voltage_meas = ADC_avg*(5/1024)`$
 
-**Measuring of resistance:** divide the voltage by the current, and subtract the reference resistance. This is done so that if suddenly we have some small resistance, we can add a large resistance to it in a series, then we can calculate the total current through them, respectively, at the end we subtract a large resistance
+**Measuring of resistance:** Resistance is calculated as a division of reference voltage `REF_V` (5V by default) and measured current. If additional resistance is used in the series connection with the measured one, its value should be assigned to the global variable `REF_R`. The code adjusts the display of resistance in `kO` (kiloOhms) or `O` (Ohms), according to its absolute value (>1000 Ohms => display in kO, otherwise in O). The total equation is:
  
 `resistance_meas = REF_V / current_meas - REF_R`
 
-**Measuring of capacitance:**
+**Measuring of capacitance:** Capacitance is measured according to its definition. For a capacitor, the capacitance equals the charge divided by voltage. Thus, if we apply a known voltage (5V `REF_V`) to the **discharged!** capacitor, the integral of its current in the time domain equals its charge. We know that during the charging process, the current through the capacitor decreases exponentially, so after the measurement is started, a user should wait an appropriate amount of time for current stabilization. The code adjusts the measured value is well, displaying it in `uF`, `mF` or `F`. the total equation is:
 
 `capacitance_meas = value_avg`
-
-
-
 
 ## Accuracy issues
 
@@ -53,14 +51,6 @@ Circuit of a `bandgap` reference:
 * Also, one of the reasons for inaccuracies in the measurement may be overheating of the sensor and other components, but we do not take this into account and therefore this may affect the quality of the measurements.
 
 ## Software description
-
-Put flowcharts of your algorithm(s) and direct links to source files in `src` or `lib` folders.
-
-**code_functions:**
-
-* [code_functions.c](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.c)
-
-* [code_functions.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/code_functions/code_functions.h)
 
 **adc:**
 
