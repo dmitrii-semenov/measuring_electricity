@@ -106,7 +106,7 @@ Here the block diagram of the whole process is presented:
 
 `Voltage Measurement`:
 
-<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/U.jpeg" width="300" height="300">
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/V.jpeg" width="300" height="300">
 
 `Resistance Measurement`:
 
