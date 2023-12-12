@@ -69,7 +69,16 @@ In the `main.c` file, we have global variables involved:
 ## Instructions
 
 Write an instruction manual for your application, including photos and a link to a short app video.
+1. The first step is to perform a calibration measurement in order to understand the offset and set it in the program;
+2. Before starting the measurement, you need to check which voltage you have;
+3. Set the `Average factor`;
+4. Set the value of the reference resistor;
+5. Connect the desired circuit, depending on what value you want to measure (current, voltage, resistance, capacitance);
+6. Turn on the device;
+7. Use the button to select the mode to measure the desired value;
+8. Now wait a bit , the measurement is being carried out;
 
+2. 
 ## References
 
 1. Write your text here.
