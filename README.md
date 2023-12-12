@@ -52,9 +52,15 @@ Put flowcharts of your algorithm(s) and direct links to source files in `src` or
 
 * [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.h)
 
+**main.c:**
+
+* [main.c file](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/src/main.c)
+
 To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
 
 In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
+
+Since we chose the way to solve our project using adc, in order to configure the registers and the adc function, we needed to make a new library `adc` where the registers for adc are written and where the names of the functions that we will use are simply written. The library also consists of 2 parts, in `adc.h `part the names of the functions are simply spelled out, and in the `adc.c` part registers are added to the functions(Library with custom ADC functions).
 
 In the `main.c` file, we have global variables involved: 
 * `mode`(mode of measurement) - the first variable is used to switch the mode of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
