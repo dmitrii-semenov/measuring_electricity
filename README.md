@@ -46,21 +46,17 @@ However, there are some accuracy problems that we have detected during the proje
 
 * We power Arduino Uno externally via a USB port. On the Arduino board, there is a 5V voltage stabilizer, but it is not an ideal stabilizer. According to the datasheet of a stabilizer [LM7805](https://www.sparkfun.com/datasheets/Components/LM7805.pdf), that is used in Arduino, the output voltage has a tolerance range of 4.8 - 5.2V. This affects the accuracy of the ADC block and the measurement itself. We tried to use the bandgap voltage reference (VBG), available in the Arduino board. However, the ADC measurement range would be limited to 1.1V (VBG voltage), which is not enough for decoding the current sensor value (since it has a 2.5V on the output in idle mode). That's why we had to use the internal 5V reference and thus, we worked with a "noisy" IDC block.
 
-* The current sensor, that we used, has a conversion scale of `185mV/A`, and at the same time, ADC with 5V reference has a step of approximately 5 mV. (1024 values/5V). This means, that only 37 ADC steps are inside a relative change for 1A (a 27 mA step in one ADC step). This would not only strictly limit the range of ADC we use(for a 5A sensor, the output voltage within the range 1.575V (322 in ADC) - 3.425V(702 in ADC)), but would limit the minimum current we can measure. Assuming, that ADC has a &plusmn; 12 mV Worst-Cade [error](https://forum.allaboutcircuits.com/threads/arduino-uno-adc-accuracy.144622/#:~:text=The%20error%20level%20of%20the,correctly%20read%200%20and%205000mV.), it would add a &plusmn; 65 mA error. As a result, such small currents can't be measured at all and we recommend using the proposed device with a minimum level of `100 mA`.  
+* The current sensor, that we used, has a conversion scale of `185mV/A`, and at the same time, ADC with 5V reference has a step of approximately 5 mV. (1024 values/5V). This means, that only 37 ADC steps are inside a relative change for 1A (a 27 mA step in one ADC step). This would not only strictly limit the range of ADC we use(for a 5A sensor, the output voltage within the range 1.575V (322 in ADC) - 3.425V(702 in ADC)), but would limit the minimum current we can measure. Assuming, that ADC has a &plusmn; 12 mV Worst-Case [error](https://forum.allaboutcircuits.com/threads/arduino-uno-adc-accuracy.144622/#:~:text=The%20error%20level%20of%20the,correctly%20read%200%20and%205000mV.), it would add a &plusmn; 65 mA error. As a result, such small currents can't be measured at all and we recommend using the proposed device with a minimum level of `100 mA`.  
 
 * Finally, the sensor overheating (because it has a close to zero, but non-zero resistance) also impacts measurement accuracy. Thus, measuring big currents may be problematic because of this.
 
 ## Software description
 
-**adc:**
+Our custom [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/include/adc.h) library made for help with ADC operations.
 
-* [adc.h](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/lib/adc/adc.h)
+Main source file [main.c file](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/src/main.c) with the core code.
 
-**main.c:**
-
-* [main.c file](https://github.com/dmitrii-semenov/measuring_electricity/blob/main/measuring_electricity/src/main.c)
-
-To implement our project, we needed libraries that we used in computer classes: `timer.h`, `gpio`, `oled`, `twi` and we needed to write new libraries with which we could correctly program the design of the display itself to display measurements and program the pins from which we get the main information. 
+Regarding other used libraries, we used `timer.h` (for timers and interruptions), `gpio` (pins management), `oled` (OLED display functions), `twi` (library needed for OLED desiplay). 
 
 In order to make the design of displaying the results on the display, we used a library `code_functions` that consists of two parts, the first part `code_functions.h` contains just the names of the functions used, and the second part `code_functions.c` contains the main code with information about how data is written to registers and configuration takes place, with the help of which we can subsequently display the values or clear the display before subsequent measurement, it cleans only the positions where the measurement figures of our quantities are located and does not touch the rest of the interface, which must be permanently stored on our displays.
 
