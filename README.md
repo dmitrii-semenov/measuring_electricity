@@ -38,7 +38,7 @@ $$C = \frac{1}{V_{ref}} \cdot \sum_{t=0}^{t=n}I_n \cdot \Delta t$$
 
 Our final proposed design looks as follows:
 
-<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/Bandgap-reference.svg.png" width="300" height="300">
+<img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/schematic.jpg" width="300" height="300">
 
 ## Accuracy issues
 
