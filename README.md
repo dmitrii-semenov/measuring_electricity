@@ -106,7 +106,7 @@ Also, there are some parameters, that need to be defined by a user:
 
 Average process C syntax:
 ``` c
-    ISR(TIMER0_OVF_vect)                                                        // ADC value read every 50ms
+    ISR(TIMER0_OVF_vect)                                                    // ADC value read every 50ms
     {
     static uint8_t no_of_overflows = 0;
     static uint8_t no_average = 0;
