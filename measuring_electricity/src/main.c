@@ -93,12 +93,12 @@ int main(void)
 
     if (AVERAGE_FACTOR > 1)                                                 // Average enable indicator
     {
-        oled_gotoxy(0, 6);
+        oled_gotoxy(0, 7);
         oled_puts("AVERAGE ON");
     }
     else
     {
-        oled_gotoxy(0, 6);
+        oled_gotoxy(0, 7);
         oled_puts("AVERAGE OFF");
     }
 
