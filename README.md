@@ -28,6 +28,10 @@ Our proposed schematic of the circuit for Bipolar Junction Transistor (BJT) test
 
 $$I = (ADC_{avg} \cdot \frac{5000}{1024} - 2500)/185$$
 
+``` c
+    current_meas = ((value_avg*1000.00)-2500.00)/185.00 + Sensor_Off;
+```
+
 **Measuring of voltage:** The voltage is calculated directly from the ADC averaged value. The code adjusts the display of voltage in `mV` or `V` as well, according to its absolute value (>1V => display in V, otherwise in mV). The total equation is:
 
 $$V = ADC_{avg} \cdot \frac{5}{1024}$$
