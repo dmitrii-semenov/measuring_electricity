@@ -78,6 +78,17 @@ In the `main.c` file, we have global variables involved:
 
 Also, due to the fact that the ADC is too noisy in block `ISR(TIMER0_OVF_vect)`, we have done averaging, which will stabilize the values very well, this will greatly help in improving the measurement accuracy. We did this in such a way that the user can set himself what amount of averaging he wants (how much he wants to average the value).
 
+* blok `int main(void)` - this is the setting of the ADC converter, so that there is a correct reference, so that everything is correctly active, the input is selected (configuration of the adc)
+
+* command `GPIO_mode_input_pullup(&DDRD, SW)` - sets the pin to which the button is connected, the initial value is 1. If you connect the button without this command, then it works poorly, if you press it, it fixes that the button is pressed, and if you release it, it does not fix that the button is started. This is done because the ground appears on the pin in some way, and then he cannot identify that the button has been pressed. But if we make a command, then the pin wants to see 1, and when we press the button, 1 appears there and when the button is pressed, then there is no longer 1, and he already understands that the button is not pressed.(Dima chekni nujno li eto ili naxyi)
+
+* blok `ISR(INT0_vect)` - button monitor
+
+* blok `ISR(TIMER0_OVF_vect)` - we read the value from the adc once every 50ms. We read one value, and we increase number of average, we read the value and add to `ADC_avg_internal` this value divided by the number of averages. And as soon as we reach the required number of averages, which is determined by the user, then we skip the signal ADC internal to ADC avg.
+
+* blok `ISR(TIMER1_OVF_vect)` - it is responsible for the button, it is triggered once every third of a second. He looks at whether the button has been pressed at least once during this time. If yes, then it switches the mode to the next measurement mode.
+* blok `ISR(ADC_vect)` - the calculation itself is already happening here. As soon as an ADC signal appears, we convert it to voltage. For calculations, we use the average value, then we count the current, then we count the resistance and capacitance.
+
 
 ## Instructions
 
