@@ -27,7 +27,7 @@ Our proposed device can measure two basic parameters, voltage and current, which
 **Measuring of voltage:** The voltage is calculated directly from the ADC averaged value. The code adjusts the display of voltage in `mV`
  or `V` as well, according to its absolute value (>1V => display in V, otherwise in mV). The total equation is:
 
-$`voltage_meas = ADC_avg*(5/1024)`$
+$`V = ADC_{avg}/cdot/frac{5}/{1024}`$
 
 **Measuring of resistance:** Resistance is calculated as a division of reference voltage `REF_V` (5V by default) and measured current. If additional resistance is used in the series connection with the measured one, its value should be assigned to the global variable `REF_R`. The code adjusts the display of resistance in `kO` (kiloOhms) or `O` (Ohms), according to its absolute value (>1000 Ohms => display in kO, otherwise in O). The total equation is:
  
