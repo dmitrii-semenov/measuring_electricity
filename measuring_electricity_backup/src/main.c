@@ -34,7 +34,7 @@ volatile uint8_t mode = 0;                                          // Mode of m
 volatile uint8_t SW_ena = 0;                                        // Button sensor
 volatile float ADC_avg_internal = 0;
 volatile float ADC_avg = 0;                                         // Averaged ADC value 
-static float Sensor_Off = 0;                                        // Offset (ADC and sensor, used for calibration)
+static float Sensor_Off = -1;                                        // Offset (ADC and sensor, used for calibration)
 
 float current_meas;                                                 // Calculated value of current
 float voltage_meas;                                                 // Calculated value of voltage

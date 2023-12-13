@@ -38,7 +38,7 @@ volatile uint8_t SW_ena = 0;                                                // B
 volatile float ADC_avg_internal = 0;
 volatile float ADC_avg = 0;                                                 // Averaged ADC value 
 volatile float Cap_charge = 0;                                              // Charge of the capacitance
-static float Sensor_Off = 0;                                                // Offset (ADC and sensor, used for calibration)
+static float Sensor_Off = -0.5;                                                // Offset (ADC and sensor, used for calibration)
 
 float current_meas;                                                         // Calculated value of current
 float voltage_meas;                                                         // Calculated value of voltage
@@ -184,7 +184,7 @@ ISR(ADC_vect)
                 curr_int = current_meas*1000;
                 dtostrf(curr_int,5,2,string);                               // Convert float to string
                 oled_gotoxy(13, 4);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("          ");
                 oled_gotoxy(13, 1);                                         // Display current
                 oled_puts(string);
                 oled_puts(" mA");
@@ -208,7 +208,7 @@ ISR(ADC_vect)
             {
                 dtostrf(voltage_meas,5,2,string);                           // Convert float to string
                 oled_gotoxy(13, 1);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 2);                                         // Display voltage
                 oled_puts(string);
                 oled_puts(" V");
@@ -218,7 +218,7 @@ ISR(ADC_vect)
                 voltage_meas = value_avg/1000;
                 dtostrf(voltage_meas,5,2,string);                           // Convert float to string
                 oled_gotoxy(13, 1);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 2);                                         // Display voltage
                 oled_puts(string);
                 oled_puts(" mV");
@@ -233,7 +233,7 @@ ISR(ADC_vect)
                 resistance_meas = resistance_meas/1000;
                 dtostrf(resistance_meas,5,2,string);                        // Convert float to string
                 oled_gotoxy(13, 2);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 3);                                         // Display resistance
                 oled_puts(string);
                 oled_puts(" kO");
@@ -242,7 +242,7 @@ ISR(ADC_vect)
             {
                 dtostrf(resistance_meas,5,2,string);                        // Convert float to string
                 oled_gotoxy(13, 2);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 3);                                         // Display resistance
                 oled_puts(string);
                 oled_puts(" O");
@@ -259,7 +259,7 @@ ISR(ADC_vect)
                 capacitance_meas = capacitance_meas/1000;                   // If bigger than 1000 uF, convert to mF
                 dtostrf(capacitance_meas,5,2,string);                       // Convert float to string
                 oled_gotoxy(13, 3);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 4);                                         // Display capacitance
                 oled_puts(string);
                 oled_puts(" mF");
@@ -269,7 +269,7 @@ ISR(ADC_vect)
                 capacitance_meas = capacitance_meas/1000000;                // If bigger than 1000 mF, convert to F
                 dtostrf(capacitance_meas,5,2,string);                       // Convert float to string
                 oled_gotoxy(13, 3);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 4);                                         // Display capacitance
                 oled_puts(string);
                 oled_puts(" F");
@@ -278,7 +278,7 @@ ISR(ADC_vect)
             {
                 dtostrf(capacitance_meas,5,2,string);                       // Convert float to string
                 oled_gotoxy(13, 3);                                         // Clear previous value
-                oled_puts("           ");
+                oled_puts("            ");
                 oled_gotoxy(13, 4);                                         // Display capacitance
                 oled_puts(string);
                 oled_puts(" uF");
