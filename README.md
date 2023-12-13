@@ -81,7 +81,7 @@ However, there are some accuracy problems that we have detected during the proje
 
 * The current sensor, that we used, has a conversion scale of `185mV/A`, and at the same time, ADC with 5V reference has a step of approximately 5 mV. (1024 values/5V). This means, that only 37 ADC steps are inside a relative change for 1A (a 27 mA step in one ADC step). This would not only strictly limit the range of ADC we use(for a 5A sensor, the output voltage within the range 1.575V (322 in ADC) - 3.425V(702 in ADC)), but would limit the minimum current we can measure. Assuming, that ADC has a &plusmn; 12 mV Worst-Case [error](https://forum.allaboutcircuits.com/threads/arduino-uno-adc-accuracy.144622/#:~:text=The%20error%20level%20of%20the,correctly%20read%200%20and%205000mV.), it would add a &plusmn; 65 mA error. As a result, such small currents can't be measured at all and we recommend using the proposed device with a minimum level of `100 mA`.  
 
-* Finally, the sensor overheating (because it has a close to zero, but non-zero resistance) also impacts measurement accuracy. Thus, measuring big currents may be problematic because of this.
+* Finally, the sensor overheating (because it has a close to zero, but non-zero resistance) also impacts measurement accuracy. Thus, measuring big currents may be problematic and inaccurate.
 
 ## Software description
 
