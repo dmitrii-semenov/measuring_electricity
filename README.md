@@ -1,6 +1,6 @@
 # Project in C
 
-Topic: Measuring Electricity
+Topic: Measuring Electricity for Arduino Uno
 
 ### Team members
 
@@ -96,7 +96,7 @@ We also used an internally declared function `Clear_values` to clear the values 
 In the `main.c` file, we have declared some global variables: 
 * `mode`(mode of measurement) - used to switch between different modes of the measured value (0-current,  1-voltage, 2-resistance, 3-capacitance);
 * `SW_ena`(button sensor) - this is the variable used for the button control, if the value of `SW_ena` is higher than '0' it means that the button was pressed and the circuit should switch to the next mode if the value is '0' - the button wasn't pressed;
-* `Sensor_Off` - this is the offset of the sensor, needed if there is an error(shift) in the ADC or in the sensor and it doesn't hold 2.5V at the output in idle mode(at zero current), then some current can be added to this variable, which will shift the result (used for calibration);
+* `Sensor_Off` - this is the offset of the sensor, needed if there is an error(shift) in the ADC or the sensor and it doesn't hold 2.5V at the output in idle mode(at zero current), then some current can be added to this variable, which will shift the result (used for calibration);
 * `ADC_avg` - the variable with the averaged value of the ADC converter(averaged ADC value);
 * `Cap_charge` - variable where the total charge of the capacitor is written (for capacity calculation);
 
@@ -160,6 +160,7 @@ Here the block diagram of the whole process is presented:
 `Voltage Measurement`:
 
 Don't forget to connect the GND net with the Arduino ground! Otherwise, the voltage may be shifted from the actual value.
+Also, connect pin ADC to the A0 analog input pin on your Arduino Uno.
 
 <img src="https://github.com/dmitrii-semenov/measuring_electricity/blob/main/pictures/V.jpeg" width="300" height="300">
 
